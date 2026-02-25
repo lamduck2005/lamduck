@@ -11,8 +11,8 @@ const router = createRouter({
       meta: {
         showInMenu: true,
         // showInHome: true,
-        title: "Back to home",
-        icon: "weui:back-filled",
+        title: "Home",
+        icon: "ri:home-line",
         color: "bg-primary/10 text-primary",
       },
     },
