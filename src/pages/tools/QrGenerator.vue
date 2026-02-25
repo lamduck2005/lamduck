@@ -266,7 +266,7 @@ onMounted(() => {
 
 <template>
     <div
-        class="relative flex h-full w-full flex-col bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden pb-24 lg:pb-0">
+        class="relative flex h-full w-full flex-col bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
         <div
             class="flex items-center justify-between px-4 py-4 sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-[#392839] shrink-0">
             <div class="flex items-center gap-3">
