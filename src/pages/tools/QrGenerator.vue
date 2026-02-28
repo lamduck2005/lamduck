@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from "vue";
 import QRCodeStyling from "qr-code-styling";
+import { Icon } from '@iconify/vue';
 
 const qrContainer = ref(null);
 
@@ -53,20 +54,106 @@ const DESIGN_STORAGE_KEY = "lamduck-qr-design";
 
 const design = reactive({
     dotsColor: "#ec13ec",
+    dotsGradient: null,
     backgroundColor: "#ffffff",
     isBgTransparent: false,
     cornersSquareColor: "#000000",
     cornersDotColor: "#000000",
     logoImage: null,
     logoMargin: 5,
-    imageSize: 0.3,
+    imageSize: 0.4,
     hideBgBehindLogo: true,
     dotsType: "square",
     cornersSquareType: "square",
     cornersDotType: "square",
 });
 
+// Khi user tự đổi màu chấm, xóa gradient để màu mới ăn vào
+watch(() => design.dotsColor, () => {
+    if (design.dotsGradient) design.dotsGradient = null;
+});
+
 const dotTypes = ["square", "dots", "rounded", "extra-rounded", "classy", "classy-rounded"];
+
+// --- Mảng Presets Đầy Đủ (Reset, Basic, Social, Tech, Entertainment) ---
+const qrPresets = [
+    {
+        name: 'None (Reset)',
+        icon: 'material-symbols:device-reset',
+        config: { dotsColor: '#ec13ec', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#000000', cornersDotColor: '#000000', dotsType: 'square', cornersSquareType: 'square', cornersDotType: 'square', logoImage: null, imageSize: 0.3, logoMargin: 5 }
+    },
+    {
+        name: 'Web Link',
+        icon: 'material-symbols:link',
+        config: { dotsColor: '#000000', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#000000', cornersDotColor: '#000000', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/fluent-emoji-flat/link.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Facebook',
+        icon: 'logos:facebook',
+        config: { dotsColor: '#1877F2', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#1877F2', cornersDotColor: '#1877F2', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/facebook.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Instagram',
+        icon: 'skill-icons:instagram',
+        config: { dotsColor: '#bc1888', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#bc1888', cornersDotColor: '#f09433', dotsType: 'dots', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/skill-icons/instagram.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'TikTok',
+        icon: 'logos:tiktok-icon',
+        config: { dotsColor: '#000000', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#FE2C55', cornersDotColor: '#25F4EE', dotsType: 'square', cornersSquareType: 'square', cornersDotType: 'square', logoImage: 'https://api.iconify.design/logos/tiktok-icon.svg', imageSize: 0.35, logoMargin: 5 }
+    },
+    {
+        name: 'YouTube',
+        icon: 'logos:youtube-icon',
+        config: { dotsColor: '#FF0000', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#FF0000', cornersDotColor: '#FF0000', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'square', logoImage: 'https://api.iconify.design/logos/youtube-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Zalo',
+        icon: 'arcticons:zalo',
+        config: { dotsColor: '#0068FF', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#0068FF', cornersDotColor: '#0068FF', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/simple-icons/zalo.svg?color=%230068FF', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Telegram',
+        icon: 'logos:telegram',
+        config: { dotsColor: '#0088cc', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#0284C7', cornersDotColor: '#38BDF8', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/telegram.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Discord',
+        icon: 'logos:discord-icon',
+        config: { dotsColor: '#5865F2', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#5865F2', cornersDotColor: '#5865F2', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/discord-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'GitHub',
+        icon: 'logos:github-icon',
+        config: { dotsColor: '#24292e', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#24292e', cornersDotColor: '#24292e', dotsType: 'square', cornersSquareType: 'square', cornersDotType: 'square', logoImage: 'https://api.iconify.design/logos/github-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Google',
+        icon: 'logos:google-icon',
+        config: { dotsColor: '#4285F4', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#EA4335', cornersDotColor: '#FBBC05', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/google-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Netflix',
+        icon: 'logos:netflix-icon',
+        config: { dotsColor: '#E50914', dotsGradient: null, backgroundColor: '#000000', isBgTransparent: false, cornersSquareColor: '#E50914', cornersDotColor: '#E50914', dotsType: 'square', cornersSquareType: 'square', cornersDotType: 'square', logoImage: 'https://api.iconify.design/logos/netflix-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'Spotify',
+        icon: 'logos:spotify-icon',
+        config: { dotsColor: '#1DB954', dotsGradient: null, backgroundColor: '#191414', isBgTransparent: false, cornersSquareColor: '#1DB954', cornersDotColor: '#1DB954', dotsType: 'dots', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/spotify-icon.svg', imageSize: 0.4, logoMargin: 5 }
+    },
+    {
+        name: 'PayPal',
+        icon: 'logos:paypal',
+        config: { dotsColor: '#00457C', dotsGradient: null, backgroundColor: '#ffffff', isBgTransparent: false, cornersSquareColor: '#00457C', cornersDotColor: '#0079C1', dotsType: 'rounded', cornersSquareType: 'extra-rounded', cornersDotType: 'dot', logoImage: 'https://api.iconify.design/logos/paypal.svg', imageSize: 0.4, logoMargin: 5 }
+    }
+];
+
+const applyPreset = (presetConfig) => {
+    if (fileInput.value) fileInput.value.value = "";
+    Object.assign(design, presetConfig);
+    errorCorrection.value = 'H';
+};
 const cornerSquareTypes = ["square", "dot", "extra-rounded"];
 const cornerDotTypes = ["square", "dot"];
 
@@ -92,7 +179,7 @@ const isContentEmpty = computed(() => {
 const showLogoEcWarning = computed(() => !!design.logoImage && errorCorrection.value !== "H");
 
 const isDesignOpen = ref(false);
-const activeAccordion = ref("colors");
+const activeAccordion = ref("presets");
 const toggleAccordion = (acc) => {
     activeAccordion.value = activeAccordion.value === acc ? "" : acc;
 };
@@ -175,7 +262,11 @@ const getQrOptions = (targetSize) => {
         margin: Math.floor(targetSize * 0.05),
         data: buildContent() || " ", // Giữ khoảng trắng để tránh lỗi null
         qrOptions: { errorCorrectionLevel: errorCorrection.value },
-        dotsOptions: { color: design.dotsColor, type: design.dotsType },
+        dotsOptions: {
+            type: design.dotsType,
+            color: design.dotsGradient ? undefined : design.dotsColor,
+            gradient: design.dotsGradient || undefined
+        },
         backgroundOptions: { color: design.isBgTransparent ? "rgba(0,0,0,0)" : design.backgroundColor },
         cornersSquareOptions: { color: design.cornersSquareColor, type: design.cornersSquareType },
         cornersDotOptions: { color: design.cornersDotColor, type: design.cornersDotType },
@@ -497,6 +588,34 @@ onMounted(() => {
                     </button>
 
                     <div v-show="isDesignOpen" class="space-y-3 mt-3">
+                        <div class="rounded-xl bg-white dark:bg-[#271c27] border border-gray-200 dark:border-[#392839] overflow-hidden transition-all duration-300">
+                            <button @click="toggleAccordion('presets')" class="flex items-center justify-between w-full p-4 text-left">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                    </div>
+                                    <span class="font-medium text-slate-900 dark:text-white">Presets</span>
+                                </div>
+                                <span class="material-symbols-outlined text-slate-400 transition-transform duration-300" :class="{ 'rotate-180': activeAccordion === 'presets' }">expand_more</span>
+                            </button>
+
+                            <div v-if="activeAccordion === 'presets'" class="px-3 pb-4 pt-0 border-t border-gray-100 dark:border-[#392839]">
+                                <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-3 max-h-[320px] overflow-y-auto custom-scrollbar pr-1">
+                                    <button
+                                        v-for="preset in qrPresets"
+                                        :key="preset.name"
+                                        @click="applyPreset(preset.config)"
+                                        class="flex flex-col items-center justify-start gap-2 p-2 rounded-xl border border-gray-200 dark:border-[#543b54] bg-slate-50 dark:bg-[#2e1d2e] hover:border-primary hover:bg-primary/5 transition-all group active:scale-95"
+                                    >
+                                        <div class="h-10 flex items-center justify-center">
+                                            <Icon :icon="preset.icon" class="text-[28px] text-slate-700 dark:text-slate-300 group-hover:scale-110 transition-transform" />
+                                        </div>
+                                        <span class="text-[10px] font-semibold text-center leading-tight text-slate-600 dark:text-slate-300">{{ preset.name }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div
                             class="rounded-xl bg-white dark:bg-[#271c27] border border-gray-200 dark:border-[#392839] overflow-hidden transition-all duration-300">
                             <button @click="toggleAccordion('colors')"
